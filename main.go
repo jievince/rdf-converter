@@ -59,11 +59,12 @@ func Read(rdfPath string) error {
     }()
 
     lineNum, numErrorLines := 0, 0
-    
+
+    lastLV, lastRV := "rdf-converter", "rdf-converter"    
     for {
-        if lineNum % 10000 == 0 {
-            fmt.Printf("hava read lines: %d\n", lineNum)
-        }
+        //if lineNum % 100000 == 0 {
+        //    fmt.Printf("hava read lines: %d\n", lineNum)
+        //}
 
         line, err := reader.Read()
         if err == io.EOF {
@@ -86,14 +87,19 @@ func Read(rdfPath string) error {
         vL := make([]string, 2)
         vL[0] = C.GoString(C.getHash(C.CString(line[0])))
         vL[1] = line[0]
+        if line[0] != lastLV {
+            vWriter.Write(vL)
+            lastLV = line[0]
+        }
 
         vR := make([]string, 2)
         vR[0] = C.GoString(C.getHash(C.CString(line[2])))
         vR[1] = line[2]
-      
-        vWriter.Write(vL)
-        vWriter.Write(vR)
- 
+        if line[2] != lastRV {
+            vWriter.Write(vR)
+            lastRV = line[2]
+        }
+        
         E := make([]string, 3)
         E[0] = vL[0]
         E[1] = vR[0]
