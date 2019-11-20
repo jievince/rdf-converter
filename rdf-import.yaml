@@ -1,0 +1,42 @@
+version: v1rc1
+description: example
+clientSettings:
+  concurrency: 10 # number of graph clients
+  channelBufferSize: 128
+  space: test
+  connection:
+    user: user
+    password: password
+    address: 127.0.0.1:3699
+logPath: ./err/test.log
+files:
+- path: ./vertex.csv
+    failDataPath: ./err/vertex.csv
+    batchSize: 100
+    type: csv
+    csv:
+      withHeader: false
+      withLabel: false
+    schema:
+      type: vertex
+      vertex:
+        tags:
+          - name: entity
+            props:
+              - name: name
+                type: string
+  - path: ./edge.csv
+    failDataPath: ./err/edge.csv
+    batchSize: 100
+    type: csv
+    csv:
+      withHeader: false
+      withLabel: false
+    schema:
+      type: edge
+      edge:
+        name: relation
+        withRanking: false
+        props:
+          - name: name
+            type: string
