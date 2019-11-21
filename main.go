@@ -60,11 +60,15 @@ func Read(rdfPath string) error {
 
     lineNum, numErrorLines := 0, 0
 
-    lastLV, lastRV := "rdf-converter", "rdf-converter"    
+    var vid string
+    lVRecord := make([]string, 2)
+    rVRecord := make([]string, 2)
+    eRecord := make([]string, 3)   
+    exists := make(map[string]bool) 
     for {
-        //if lineNum % 100000 == 0 {
-        //    fmt.Printf("hava read lines: %d\n", lineNum)
-        //}
+        if lineNum % 100000 == 0 {
+            fmt.Printf("hava read lines: %d\n", lineNum)
+        }
 
         line, err := reader.Read()
         if err == io.EOF {
@@ -84,27 +88,26 @@ func Read(rdfPath string) error {
             continue
         }
 
-        vL := make([]string, 2)
-        vL[0] = C.GoString(C.getHash(C.CString(line[0])))
-        vL[1] = line[0]
-        if line[0] != lastLV {
-            vWriter.Write(vL)
-            lastLV = line[0]
+        vid = C.GoString(C.getHash(C.CString(line[0])))
+        lVRecord[0] = vid
+        lVRecord[1] = line[0]
+        if _, ok := exists[vid]; !ok {
+            exists[vid] = true
+            vWriter.Write(lVRecord)
         }
 
-        vR := make([]string, 2)
-        vR[0] = C.GoString(C.getHash(C.CString(line[2])))
-        vR[1] = line[2]
-        if line[2] != lastRV {
-            vWriter.Write(vR)
-            lastRV = line[2]
+        vid = C.GoString(C.getHash(C.CString(line[2])))
+        rVRecord[0] = vid
+        rVRecord[1] = line[2]
+        if _, ok := exists[vid]; !ok {
+            exists[vid] = true
+            vWriter.Write(rVRecord)
         }
         
-        E := make([]string, 3)
-        E[0] = vL[0]
-        E[1] = vR[0]
-        E[2] = line[1]
-        eWriter.Write(E)
+        eRecord[0] = lVRecord[0]
+        eRecord[1] = rVRecord[0]
+        eRecord[2] = line[1]
+        eWriter.Write(eRecord)
     }
 
     return nil
