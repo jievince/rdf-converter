@@ -1,10 +1,5 @@
 package main
 
-// #cgo CFLAGS: -I${SRCDIR}/hash
-// #cgo LDFLAGS: -lstdc++ -L${SRCDIR}/hash -lhash
-// #include "bridge.h"
-import "C"
-
 import (
     "os"
     "flag"
@@ -12,10 +7,15 @@ import (
     "bufio"
     "fmt"
     "time"
+    "strconv"
     "encoding/csv"
 )
 
 var rdfPath = flag.String("path", "", "Specify rdf data path")
+
+const SEED = 0xc70f6907
+
+const CAP = 100000
 
 func main() {
     flag.Parse()
@@ -60,11 +60,10 @@ func Read(rdfPath string) error {
 
     lineNum, numErrorLines := 0, 0
 
-    var vid string
     lVRecord := make([]string, 2)
     rVRecord := make([]string, 2)
-    eRecord := make([]string, 3)   
-    exists := make(map[string]bool) 
+    eRecord := make([]string, 3)
+    exists := make(map[int64]bool)   
     for {
         if lineNum % 100000 == 0 {
             fmt.Printf("hava read lines: %d\n", lineNum)
@@ -87,23 +86,29 @@ func Read(rdfPath string) error {
             numErrorLines++
             continue
         }
+        
+        if len(exists) >= CAP {
+            exists = make(map[int64]bool)
+        }
 
-        vid = C.GoString(C.getHash(C.CString(line[0])))
-        lVRecord[0] = vid
+        hashVal := MurmurHash64A([]byte(line[0]), SEED)
+        vid := int64(hashVal)
+        lVRecord[0] = strconv.FormatInt(vid, 10)
         lVRecord[1] = line[0]
         if _, ok := exists[vid]; !ok {
             exists[vid] = true
             vWriter.Write(lVRecord)
         }
 
-        vid = C.GoString(C.getHash(C.CString(line[2])))
-        rVRecord[0] = vid
+        hashVal = MurmurHash64A([]byte(line[2]), SEED)
+        vid = int64(hashVal)
+        rVRecord[0] = strconv.FormatInt(vid, 10)
         rVRecord[1] = line[2]
         if _, ok := exists[vid]; !ok {
             exists[vid] = true
             vWriter.Write(rVRecord)
         }
-        
+    
         eRecord[0] = lVRecord[0]
         eRecord[1] = rVRecord[0]
         eRecord[2] = line[1]
