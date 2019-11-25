@@ -2,7 +2,7 @@
 
 ## 介绍
 
-  这个工具用于清洗 [Ownthink](https://www.ownthink.com/) 的知识图谱 RDF 数据，将它变成属性图模型。产出结果为一个 vertex.csv 文件和 edge.csv 文件, 分别是清洗后的顶点数据和边数据. 目前只对数据实现了简单去重。
+  这个工具用于清洗 [Ownthink](https://www.ownthink.com/) 的知识图谱 RDF 数据，将它变成属性图模型。产出结果为一个 vertex.csv 文件和 edge.csv 文件, 分别是清洗后的顶点数据和边数据。目前只对数据进行了简单去重。你也可以直接去 https://nebula-graph.oss-accelerate.aliyuncs.com/ownthink/kg_v2.tar.gz 下载完全去重后的数据。
 
 ## 如何使用
 
