@@ -11,7 +11,8 @@
 使用 --path 参数指定知识图谱的三元组数据的路径
 
 ```shell
-$ go run main.go --path rdf_data.csv
+$ go build
+$ ./rdf-converter --path rdf_data.csv
 ```
 
 这条命令会在当前目录下生成vertex.csv 文件和 edge.csv 文件。
