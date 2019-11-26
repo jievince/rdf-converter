@@ -10,7 +10,7 @@ clientSettings:
     address: 127.0.0.1:3699
 logPath: ./err/test.log
 files:
-- path: ./vertex.csv
+  - path: ./vertex.csv
     failDataPath: ./err/vertex.csv
     batchSize: 100
     type: csv
