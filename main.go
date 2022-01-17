@@ -91,18 +91,17 @@ func Read(rdfPath string) error {
             exists = make(map[int64]bool)
         }
 
-        hashVal := MurmurHash64A([]byte(line[0]), SEED)
-        vid := int64(hashVal)
-        lVRecord[0] = strconv.FormatInt(vid, 10)
+        vid := line[0]
+        lVRecord[0] = vid
         lVRecord[1] = line[0]
         if _, ok := exists[vid]; !ok {
             exists[vid] = true
             vWriter.Write(lVRecord)
         }
 
-        hashVal = MurmurHash64A([]byte(line[2]), SEED)
-        vid = int64(hashVal)
-        rVRecord[0] = strconv.FormatInt(vid, 10)
+        
+        vid = line[2]
+        rVRecord[0] = vid
         rVRecord[1] = line[2]
         if _, ok := exists[vid]; !ok {
             exists[vid] = true
