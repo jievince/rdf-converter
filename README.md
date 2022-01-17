@@ -20,3 +20,5 @@ $ ./rdf-converter --path rdf_data.csv
 之后, 就可以使用[nebula-importer](https://github.com/vesoft-inc/nebula-importer)来导入到 [Nebula 图数据库](https://github.com/vesoft-inc/nebula) 中啦。
 
 说明：nebula-importer要求使用一个yaml配置文件去导入数据，你可以直接使用我写好的这个rdf-import.yaml。
+
+_特殊说明_：本工具适用于 Nebula v1.x 版本，由于 Nebula v2.x 数据格式变更本工具未适配新版本。以及本工具采用 hash 方式获得点的唯一标识 VID，当数据量大时会遇到 VID 重复问题。
