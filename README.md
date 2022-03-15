@@ -12,10 +12,23 @@
 
 ```shell
 $ go build
+
+$ head rdf_data.csv
+猫,捕食,老鼠
+
 $ ./rdf-converter --path rdf_data.csv
 ```
 
-这条命令会在当前目录下生成vertex.csv 文件和 edge.csv 文件。
+这条命令会在当前目录下生成 `vertex.csv` 文件和 `edge.csv` 文件。
+
+```shell
+$ head vertex.csv
+猫
+老鼠
+
+$ head edge.csv
+猫,老鼠,捕食
+```
 
 之后, 就可以使用[nebula-importer](https://github.com/vesoft-inc/nebula-importer)来导入到 [Nebula 图数据库](https://github.com/vesoft-inc/nebula) 中啦。
 

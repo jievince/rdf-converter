@@ -59,3 +59,7 @@ iles:
         dstVID:
           index: 1
           type: string
+        props:
+          - name: name
+            type: string
+            index: 2
