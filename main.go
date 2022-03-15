@@ -7,13 +7,10 @@ import (
     "bufio"
     "fmt"
     "time"
-    "strconv"
     "encoding/csv"
 )
 
 var rdfPath = flag.String("path", "", "Specify rdf data path")
-
-const SEED = 0xc70f6907
 
 const CAP = 100000
 
@@ -63,7 +60,7 @@ func Read(rdfPath string) error {
     lVRecord := make([]string, 2)
     rVRecord := make([]string, 2)
     eRecord := make([]string, 3)
-    exists := make(map[int64]bool)   
+    exists := make(map[string]bool)   
     for {
         if lineNum % 100000 == 0 {
             fmt.Printf("hava read lines: %d\n", lineNum)
@@ -88,7 +85,7 @@ func Read(rdfPath string) error {
         }
         
         if len(exists) >= CAP {
-            exists = make(map[int64]bool)
+            exists = make(map[string]bool)
         }
 
         vid := line[0]
