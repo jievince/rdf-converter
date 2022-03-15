@@ -1,5 +1,5 @@
 version: v1rc1
-description: example
+description: example for nebula v1, ref: https://github.com/jievince/rdf-converter/blob/v1/
 clientSettings:
   concurrency: 10 # number of graph clients
   channelBufferSize: 128

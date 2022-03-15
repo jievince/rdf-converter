@@ -57,8 +57,8 @@ func Read(rdfPath string) error {
 
     lineNum, numErrorLines := 0, 0
 
-    lVRecord := make([]string, 2)
-    rVRecord := make([]string, 2)
+    lVRecord := make([]string, 1)
+    rVRecord := make([]string, 1)
     eRecord := make([]string, 3)
     exists := make(map[string]bool)   
     for {
@@ -90,7 +90,6 @@ func Read(rdfPath string) error {
 
         vid := line[0]
         lVRecord[0] = vid
-        lVRecord[1] = line[0]
         if _, ok := exists[vid]; !ok {
             exists[vid] = true
             vWriter.Write(lVRecord)
@@ -99,7 +98,6 @@ func Read(rdfPath string) error {
         
         vid = line[2]
         rVRecord[0] = vid
-        rVRecord[1] = line[2]
         if _, ok := exists[vid]; !ok {
             exists[vid] = true
             vWriter.Write(rVRecord)
