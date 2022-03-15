@@ -1,0 +1,61 @@
+version: v2
+description: example of nebula graph v2, v3
+removeTempFiles: false
+clientSettings:
+  retry: 6
+  concurrency: 1 # number of graph clients
+  channelBufferSize: 16
+  space: ownthink
+  connection:
+    user: root
+    password: nebula
+    address: 127.0.0.1:9669 # change to your nebula graph's graphd address
+  postStart:
+    commands: |
+      CREATE SPACE IF NOT EXISTS ownthink(partition_num=50, replica_factor=1, vid_type=int);
+      USE ownthink;
+      CREATE TAG `entity`();
+      CREATE EDGE `relation`();
+    afterPeriod: 8s
+  preStop:
+    commands: |
+      SUBMIT JOB STATS;
+logPath: ./err/importer.log
+iles:
+  - path: ./vertex.csv
+    failDataPath: ./err/vertex.csv
+    batchSize: 128
+    inOrder: true
+    type: csv
+    csv:
+      withHeader: false
+      withLabel: false
+    schema:
+      type: vertex
+      vertex:
+        vid:
+          index: 0
+          type: string
+        tags:
+          - name: entity
+            props: []
+
+  - path: ./edge.csv
+    failDataPath: ./err/edge.csv
+    batchSize: 64
+    inOrder: true
+    type: csv
+    csv:
+      withHeader: false
+      withLabel: false
+    schema:
+      type: edge
+      edge:
+        name: relation
+        withRanking: false
+        srcVID:
+          index: 0
+          type: string
+        dstVID:
+          index: 1
+          type: string
